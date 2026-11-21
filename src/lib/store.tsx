@@ -56,7 +56,7 @@ interface PortfolioContextType {
 
 const PortfolioContext = createContext<PortfolioContextType | null>(null);
 
-const STORAGE_KEY = 'animated_portfolio_data_v1';
+const STORAGE_KEY = 'animated_portfolio_data_v2';
 
 export function PortfolioProvider({ children }: { children: React.ReactNode }) {
   const [data, setData] = useState<PortfolioData>(initialPortfolioData);
