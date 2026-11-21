@@ -31,7 +31,6 @@ import {
 import confetti from 'canvas-confetti';
 import { usePortfolio } from '@/lib/store';
 import { useAuth } from '@/lib/auth';
-import { SkillCategory } from '@/types/portfolio';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -67,10 +66,14 @@ export default function DashboardPage() {
 
   // Sync profile form state with loaded data
   const [profileForm, setProfileForm] = useState(data.profile);
+  const [specializationsInput, setSpecializationsInput] = useState(
+    (data.profile.specializations || []).join(', ')
+  );
   const [saveToast, setSaveToast] = useState('');
 
   useEffect(() => {
     setProfileForm(data.profile);
+    setSpecializationsInput((data.profile.specializations || []).join(', '));
   }, [data.profile]);
 
   // Monitor form states
@@ -86,7 +89,7 @@ export default function DashboardPage() {
   const [showAddTopic, setShowAddTopic] = useState(false);
   const [newTopic, setNewTopic] = useState({
     topic: '',
-    category: 'Systems & Engineering',
+    category: 'VLSI & Embedded',
     status: 'To Learn' as 'To Learn' | 'Learning' | 'Mastered',
     notes: '',
   });
@@ -94,7 +97,7 @@ export default function DashboardPage() {
   const [showAddFocus, setShowAddFocus] = useState(false);
   const [newFocus, setNewFocus] = useState({
     title: '',
-    timeframe: 'Current Quarter',
+    timeframe: 'Current Semester',
     concentrationWeight: 40,
     description: '',
     keyGoals: '',
@@ -105,19 +108,31 @@ export default function DashboardPage() {
   const [newProj, setNewProj] = useState({
     title: '',
     description: '',
-    techStack: 'TypeScript, Next.js, Tailwind CSS',
+    techStack: 'Embedded C, ESP32, MQTT',
     status: 'in_progress' as 'completed' | 'in_progress',
-    category: 'Web Engineering',
+    category: 'Embedded & IIoT',
     targetEndDate: '2027-01-30',
-    progressPercent: 50,
+    progressPercent: 60,
     repoUrl: '',
     liveUrl: '',
   });
 
-  // Skill CMS state
+  // Skill CMS state - CUSTOM FLEXIBLE DOMAINS (VLSI, Embedded, IIoT, etc.)
   const [newSkillName, setNewSkillName] = useState('');
-  const [newSkillCategory, setNewSkillCategory] = useState<SkillCategory>('Frontend');
+  const [newSkillCategory, setNewSkillCategory] = useState('VLSI');
   const [newSkillProficiency, setNewSkillProficiency] = useState(85);
+
+  const suggestedSkillCategories = [
+    'VLSI',
+    'Embedded',
+    'IIoT',
+    'Electronics',
+    'Communication',
+    'Vibe Coding',
+    'Website Builder',
+    'Content Creator',
+    'Engineering Services',
+  ];
 
   // Prize CMS state
   const [showAddPrize, setShowAddPrize] = useState(false);
@@ -397,7 +412,7 @@ export default function DashboardPage() {
                     </label>
                     <textarea
                       rows={3}
-                      placeholder="Write benchmark tests&#10;Deploy to staging&#10;Record launch video"
+                      placeholder="Design 2-layer PCB in KiCad&#10;Flash firmware to STM32&#10;Verify telemetry on MQTT dashboard"
                       value={newProjectToEnd.pendingMilestones}
                       onChange={(e) => setNewProjectToEnd({ ...newProjectToEnd, pendingMilestones: e.target.value })}
                       className="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600"
@@ -534,7 +549,7 @@ export default function DashboardPage() {
                     e.preventDefault();
                     addTopicToStudy(newTopic);
                     setShowAddTopic(false);
-                    setNewTopic({ topic: '', category: 'Systems & Engineering', status: 'To Learn', notes: '' });
+                    setNewTopic({ topic: '', category: 'VLSI & Embedded', status: 'To Learn', notes: '' });
                     triggerToast('Added topic to learning queue! Changes saved.');
                   }}
                   className="mb-6 p-5 rounded-2xl bg-white border border-slate-200 space-y-4 shadow-sm"
@@ -543,7 +558,7 @@ export default function DashboardPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <input
                       type="text"
-                      placeholder="Topic (e.g., eBPF Kernel Tracing)"
+                      placeholder="Topic (e.g., CMOS Analog VLSI)"
                       value={newTopic.topic}
                       onChange={(e) => setNewTopic({ ...newTopic, topic: e.target.value })}
                       required
@@ -551,7 +566,7 @@ export default function DashboardPage() {
                     />
                     <input
                       type="text"
-                      placeholder="Category (e.g., Systems Programming)"
+                      placeholder="Category (e.g., VLSI Design, Embedded, IIoT)"
                       value={newTopic.category}
                       onChange={(e) => setNewTopic({ ...newTopic, category: e.target.value })}
                       required
@@ -679,7 +694,7 @@ export default function DashboardPage() {
                   </div>
                   <div>
                     <h2 className="text-lg font-bold text-slate-900">Which Area I Want to Concentrate (Focus Pillars)</h2>
-                    <p className="text-xs text-slate-500">Quarterly effort allocation & top growth vectors</p>
+                    <p className="text-xs text-slate-500">Effort allocation across VLSI, Embedded, IIoT & Services</p>
                   </div>
                 </div>
 
@@ -707,7 +722,7 @@ export default function DashboardPage() {
                       keyGoals: newFocus.keyGoals.split('\n').filter(Boolean),
                     });
                     setShowAddFocus(false);
-                    setNewFocus({ title: '', timeframe: 'Current Quarter', concentrationWeight: 40, description: '', keyGoals: '' });
+                    setNewFocus({ title: '', timeframe: 'Current Semester', concentrationWeight: 40, description: '', keyGoals: '' });
                     triggerToast('Added focus pillar! Changes saved.');
                   }}
                   className="mb-6 p-5 rounded-2xl bg-white border border-slate-200 space-y-4 shadow-sm"
@@ -716,7 +731,7 @@ export default function DashboardPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <input
                       type="text"
-                      placeholder="Title (e.g. AI Agent Architectures)"
+                      placeholder="Title (e.g. VLSI Design & Verilog HDL)"
                       value={newFocus.title}
                       onChange={(e) => setNewFocus({ ...newFocus, title: e.target.value })}
                       required
@@ -724,7 +739,7 @@ export default function DashboardPage() {
                     />
                     <input
                       type="text"
-                      placeholder="Timeframe (e.g. Q4 2026 Focus)"
+                      placeholder="Timeframe (e.g. Current Semester Track)"
                       value={newFocus.timeframe}
                       onChange={(e) => setNewFocus({ ...newFocus, timeframe: e.target.value })}
                       required
@@ -860,18 +875,18 @@ export default function DashboardPage() {
                 Reliable Sector Update Manager
               </h2>
               <p className="text-xs text-slate-600 mt-1">
-                Directly add, modify, and manage every sector displayed across your public portfolio website.
+                Customize every single text, slogan, skill category, domain badge, and project on your website.
               </p>
 
               {/* Sector selector buttons */}
               <div className="flex flex-wrap gap-2 mt-5">
                 {[
-                  { id: 'degree', label: '1. Degree & Academics' },
-                  { id: 'extracurricular', label: '2. Extracurriculars' },
-                  { id: 'prizes', label: '3. Prizes Won' },
-                  { id: 'skills', label: '4. Skills Matrix' },
+                  { id: 'degree', label: '1. Name, Slogan & Degree' },
+                  { id: 'skills', label: '4. Skills (Custom Tags)' },
                   { id: 'projects', label: '5 & 6. Projects' },
-                  { id: 'summary', label: '7. Net Portfolio' },
+                  { id: 'prizes', label: '3. Prizes Won' },
+                  { id: 'extracurricular', label: '2. Extracurriculars' },
+                  { id: 'summary', label: '7. Net Portfolio Statement' },
                   { id: 'courses', label: '8. Courses' },
                   { id: 'certificates', label: '9. Certificates' },
                 ].map((sec) => (
@@ -890,24 +905,55 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* SECTOR 1: DEGREE & ACADEMICS */}
+            {/* SECTOR 1: NAME, SLOGAN, DEGREE & DOMAINS */}
             {activeSector === 'degree' && (
               <div className="p-6 rounded-2xl bg-white border border-slate-200 space-y-4 shadow-sm">
                 <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
                   <GraduationCap className="w-5 h-5 text-blue-600" />
-                  <span>Update Current Degree & Academic Info (Sector 1)</span>
+                  <span>Personal Identity, Slogan, Degree & Core Domains (Sector 1)</span>
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs text-slate-700 font-bold block mb-1">Full Name</label>
+                    <label className="text-xs text-slate-700 font-bold block mb-1">Your Full Name (Displays everywhere)</label>
                     <input
                       type="text"
                       value={profileForm.fullName}
                       onChange={(e) => setProfileForm({ ...profileForm, fullName: e.target.value })}
+                      placeholder="L.S.Shabari"
+                      className="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 font-bold focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-slate-700 font-bold block mb-1">Tagline (Under name in navbar)</label>
+                    <input
+                      type="text"
+                      value={profileForm.tagline || ''}
+                      onChange={(e) => setProfileForm({ ...profileForm, tagline: e.target.value })}
+                      placeholder="ECE Undergrad • VLSI, Embedded Systems, IIoT & Vibe Coding"
                       className="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600"
                     />
                   </div>
+                </div>
+
+                {/* Main Front Slogan / Headline */}
+                <div>
+                  <label className="text-xs text-slate-700 font-bold block mb-1">
+                    Main Front Page Slogan / Headline (Large title in hero)
+                  </label>
+                  <input
+                    type="text"
+                    value={profileForm.slogan || ''}
+                    onChange={(e) => setProfileForm({ ...profileForm, slogan: e.target.value })}
+                    placeholder="Engineering Intelligent Hardware, Embedded Firmware, IIoT & Modern Solutions."
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  />
+                  <span className="text-[11px] text-slate-500 mt-1 block">
+                    You can change this slogan anytime to whatever you want to highlight.
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
                     <label className="text-xs text-slate-700 font-bold block mb-1">Current Degree</label>
                     <input
@@ -918,7 +964,7 @@ export default function DashboardPage() {
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-slate-700 font-bold block mb-1">Institution / University</label>
+                    <label className="text-xs text-slate-700 font-bold block mb-1">College / University</label>
                     <input
                       type="text"
                       value={profileForm.institution}
@@ -927,7 +973,7 @@ export default function DashboardPage() {
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-slate-700 font-bold block mb-1">Year / Semester of Study</label>
+                    <label className="text-xs text-slate-700 font-bold block mb-1">Year / Semester</label>
                     <input
                       type="text"
                       value={profileForm.yearOfStudy}
@@ -937,8 +983,25 @@ export default function DashboardPage() {
                   </div>
                 </div>
 
+                {/* Core Domains & Specialization badges */}
                 <div>
-                  <label className="text-xs text-slate-700 font-bold block mb-1">Bio</label>
+                  <label className="text-xs text-slate-700 font-bold block mb-1">
+                    Specializations & Core Domains (Comma-separated, displayed in the hero hub)
+                  </label>
+                  <input
+                    type="text"
+                    value={specializationsInput}
+                    onChange={(e) => setSpecializationsInput(e.target.value)}
+                    placeholder="Electronics & Comm, VLSI Design, Embedded Systems, IIoT, Communication, Vibe Coding, Website Builder, Content Creator, Engineering Services"
+                    className="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  />
+                  <span className="text-[11px] text-slate-500 mt-1 block">
+                    Suggested tags: Electronics, VLSI, Embedded, IIoT, Communication, Vibe Coding, Website Builder, Content Creator, Services.
+                  </span>
+                </div>
+
+                <div>
+                  <label className="text-xs text-slate-700 font-bold block mb-1">Bio / Profile Description</label>
                   <textarea
                     rows={3}
                     value={profileForm.bio}
@@ -950,14 +1013,140 @@ export default function DashboardPage() {
                 <div className="flex justify-end">
                   <button
                     onClick={() => {
-                      updateProfile(profileForm);
-                      triggerToast('Academic profile updated and saved successfully! ✅');
+                      const updated = {
+                        ...profileForm,
+                        specializations: specializationsInput
+                          .split(',')
+                          .map((s) => s.trim())
+                          .filter(Boolean),
+                      };
+                      updateProfile(updated);
+                      triggerToast('Identity, Slogan & Degree Details Saved! ✅');
                     }}
                     className="flex items-center gap-2 px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition shadow-md shadow-blue-600/25"
                   >
                     <Save className="w-4 h-4" />
-                    <span>Save Academic Details</span>
+                    <span>Save All Details</span>
                   </button>
+                </div>
+              </div>
+            )}
+
+            {/* SECTOR 4: SKILLS WITH CUSTOM TAGS */}
+            {activeSector === 'skills' && (
+              <div className="p-6 rounded-2xl bg-white border border-slate-200 space-y-6 shadow-sm">
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                    <Cpu className="w-5 h-5 text-blue-600" />
+                    <span>Skills Matrix & Custom Categories (Sector 4)</span>
+                  </h3>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    No hardcoded restrictions. Type your own domain category (VLSI, Embedded, IIoT, Electronics, etc.) and it will automatically generate your filter tabs.
+                  </p>
+                </div>
+
+                {/* Add Skill Row with Custom Tag input */}
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (!newSkillName.trim()) return;
+                    addSkill({
+                      name: newSkillName.trim(),
+                      category: newSkillCategory.trim() || 'General',
+                      proficiency: newSkillProficiency,
+                      experience: '1+ year',
+                    });
+                    setNewSkillName('');
+                    triggerToast(`Added skill "${newSkillName}" in [${newSkillCategory}]!`);
+                  }}
+                  className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3"
+                >
+                  <h4 className="text-xs font-bold text-blue-600 uppercase tracking-wider">
+                    Add New Technical Skill
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <input
+                      type="text"
+                      placeholder="Skill name (e.g. Verilog HDL, STM32, MQTT)"
+                      value={newSkillName}
+                      onChange={(e) => setNewSkillName(e.target.value)}
+                      required
+                      className="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Custom Category Tag (e.g. VLSI, Embedded, IIoT)"
+                      value={newSkillCategory}
+                      onChange={(e) => setNewSkillCategory(e.target.value)}
+                      required
+                      className="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 font-semibold"
+                    />
+                    <div className="flex items-center gap-2 text-xs text-slate-700 font-bold bg-white px-3.5 py-2 rounded-xl border border-slate-200">
+                      <span>Proficiency: {newSkillProficiency}%</span>
+                      <input
+                        type="range"
+                        min="40"
+                        max="100"
+                        value={newSkillProficiency}
+                        onChange={(e) => setNewSkillProficiency(Number(e.target.value))}
+                        className="accent-blue-600 flex-1"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Quick Click Category Helpers */}
+                  <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                    <span className="text-[11px] text-slate-500 font-medium mr-1">Quick Tags:</span>
+                    {suggestedSkillCategories.map((cat) => (
+                      <button
+                        type="button"
+                        key={cat}
+                        onClick={() => setNewSkillCategory(cat)}
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-md border transition cursor-pointer ${
+                          newSkillCategory.toLowerCase() === cat.toLowerCase()
+                            ? 'bg-blue-600 text-white border-blue-600'
+                            : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300'
+                        }`}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="flex justify-end pt-2">
+                    <button
+                      type="submit"
+                      className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-sm"
+                    >
+                      Save Skill
+                    </button>
+                  </div>
+                </form>
+
+                {/* Skill List */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                  {data.skills.map((skill) => (
+                    <div
+                      key={skill.id}
+                      className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between"
+                    >
+                      <div>
+                        <span className="text-xs font-bold text-slate-900 block">{skill.name}</span>
+                        <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100">
+                          {skill.category} • {skill.proficiency}%
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => {
+                          deleteSkill(skill.id);
+                          triggerToast('Deleted skill');
+                        }}
+                        className="text-slate-400 hover:text-red-600 p-1.5"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
@@ -1000,7 +1189,7 @@ export default function DashboardPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <input
                         type="text"
-                        placeholder="Role (e.g. Club President)"
+                        placeholder="Role (e.g. Club Lead / Member)"
                         value={newEC.role}
                         onChange={(e) => setNewEC({ ...newEC, role: e.target.value })}
                         required
@@ -1008,7 +1197,7 @@ export default function DashboardPage() {
                       />
                       <input
                         type="text"
-                        placeholder="Organization (e.g. Developers Club)"
+                        placeholder="Organization (e.g. Robotics Club, KCG)"
                         value={newEC.organization}
                         onChange={(e) => setNewEC({ ...newEC, organization: e.target.value })}
                         required
@@ -1025,7 +1214,7 @@ export default function DashboardPage() {
                     </div>
                     <textarea
                       rows={2}
-                      placeholder="Description of leadership or activities..."
+                      placeholder="Description of activities..."
                       value={newEC.description}
                       onChange={(e) => setNewEC({ ...newEC, description: e.target.value })}
                       required
@@ -1132,7 +1321,7 @@ export default function DashboardPage() {
                       />
                       <input
                         type="text"
-                        placeholder="Competition / Hackathon"
+                        placeholder="Competition / Event"
                         value={newPrize.competition}
                         onChange={(e) => setNewPrize({ ...newPrize, competition: e.target.value })}
                         required
@@ -1140,7 +1329,7 @@ export default function DashboardPage() {
                       />
                       <input
                         type="text"
-                        placeholder="Rank / Position (e.g. 1st of 500)"
+                        placeholder="Rank / Position (e.g. 1st Place)"
                         value={newPrize.position}
                         onChange={(e) => setNewPrize({ ...newPrize, position: e.target.value })}
                         required
@@ -1150,7 +1339,7 @@ export default function DashboardPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <input
                         type="text"
-                        placeholder="Organizer / Institution"
+                        placeholder="Organizer / College"
                         value={newPrize.organizer}
                         onChange={(e) => setNewPrize({ ...newPrize, organizer: e.target.value })}
                         className="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900"
@@ -1166,7 +1355,7 @@ export default function DashboardPage() {
                     </div>
                     <textarea
                       rows={2}
-                      placeholder="Brief description of the solution or achievement..."
+                      placeholder="Brief description of the solution..."
                       value={newPrize.description}
                       onChange={(e) => setNewPrize({ ...newPrize, description: e.target.value })}
                       className="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900"
@@ -1208,94 +1397,6 @@ export default function DashboardPage() {
                         className="p-2 rounded-lg bg-white hover:bg-red-50 text-slate-400 hover:text-red-600 border border-slate-200"
                       >
                         <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* SECTOR 4: SKILLS */}
-            {activeSector === 'skills' && (
-              <div className="p-6 rounded-2xl bg-white border border-slate-200 space-y-6 shadow-sm">
-                <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                  <Cpu className="w-5 h-5 text-blue-600" />
-                  <span>Skills Matrix (Sector 4)</span>
-                </h3>
-
-                {/* Add Skill Row */}
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    if (!newSkillName) return;
-                    addSkill({
-                      name: newSkillName,
-                      category: newSkillCategory,
-                      proficiency: newSkillProficiency,
-                      experience: '2+ years',
-                    });
-                    setNewSkillName('');
-                    triggerToast('Added skill! Changes saved.');
-                  }}
-                  className="flex flex-wrap items-center gap-3 p-4 rounded-xl bg-slate-50 border border-slate-200"
-                >
-                  <input
-                    type="text"
-                    placeholder="Skill name (e.g. GraphQL)"
-                    value={newSkillName}
-                    onChange={(e) => setNewSkillName(e.target.value)}
-                    required
-                    className="flex-1 min-w-[180px] px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900"
-                  />
-                  <select
-                    value={newSkillCategory}
-                    onChange={(e) => setNewSkillCategory(e.target.value as any)}
-                    className="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 font-medium"
-                  >
-                    <option value="Frontend">Frontend</option>
-                    <option value="Backend">Backend</option>
-                    <option value="AI / Machine Learning">AI / Machine Learning</option>
-                    <option value="DevOps & Cloud">DevOps & Cloud</option>
-                    <option value="Core CS & Data">Core CS & Data</option>
-                  </select>
-                  <div className="flex items-center gap-2 text-xs text-slate-700 font-bold">
-                    <span>Proficiency: {newSkillProficiency}%</span>
-                    <input
-                      type="range"
-                      min="50"
-                      max="100"
-                      value={newSkillProficiency}
-                      onChange={(e) => setNewSkillProficiency(Number(e.target.value))}
-                      className="accent-blue-600 w-24"
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-sm"
-                  >
-                    Add Skill
-                  </button>
-                </form>
-
-                {/* Skill List */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                  {data.skills.map((skill) => (
-                    <div
-                      key={skill.id}
-                      className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between"
-                    >
-                      <div>
-                        <span className="text-xs font-bold text-slate-900 block">{skill.name}</span>
-                        <span className="text-[10px] text-slate-500 font-medium">{skill.category} • {skill.proficiency}%</span>
-                      </div>
-                      <button
-                        onClick={() => {
-                          deleteSkill(skill.id);
-                          triggerToast('Deleted skill');
-                        }}
-                        className="text-slate-400 hover:text-red-600"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   ))}
@@ -1360,14 +1461,14 @@ export default function DashboardPage() {
                       </select>
                       <input
                         type="text"
-                        placeholder="Category (e.g. AI Systems)"
+                        placeholder="Category (e.g. VLSI, Embedded, IIoT)"
                         value={newProj.category}
                         onChange={(e) => setNewProj({ ...newProj, category: e.target.value })}
                         className="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900"
                       />
                       <input
                         type="text"
-                        placeholder="Tech stack (comma-separated, e.g. React, Next.js, Go)"
+                        placeholder="Tech stack (comma-separated, e.g. Verilog, ModelSim / ESP32, C++)"
                         value={newProj.techStack}
                         onChange={(e) => setNewProj({ ...newProj, techStack: e.target.value })}
                         className="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900"
@@ -1381,7 +1482,7 @@ export default function DashboardPage() {
                       />
                       <input
                         type="url"
-                        placeholder="Live Demo URL (optional)"
+                        placeholder="Demo / Video URL (optional)"
                         value={newProj.liveUrl}
                         onChange={(e) => setNewProj({ ...newProj, liveUrl: e.target.value })}
                         className="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900"
@@ -1527,7 +1628,7 @@ export default function DashboardPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <input
                         type="text"
-                        placeholder="Course Title (e.g. Distributed Systems)"
+                        placeholder="Course Title (e.g. Digital Signal Processing)"
                         value={newCourse.title}
                         onChange={(e) => setNewCourse({ ...newCourse, title: e.target.value })}
                         required
@@ -1535,7 +1636,7 @@ export default function DashboardPage() {
                       />
                       <input
                         type="text"
-                        placeholder="Platform / University (e.g. MIT OCW)"
+                        placeholder="Platform / Source (e.g. NPTEL / College Course)"
                         value={newCourse.platform}
                         onChange={(e) => setNewCourse({ ...newCourse, platform: e.target.value })}
                         required
@@ -1543,14 +1644,14 @@ export default function DashboardPage() {
                       />
                       <input
                         type="text"
-                        placeholder="Instructor (e.g. Robert Morris)"
+                        placeholder="Instructor / Professor (optional)"
                         value={newCourse.instructor}
                         onChange={(e) => setNewCourse({ ...newCourse, instructor: e.target.value })}
                         className="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900"
                       />
                       <input
                         type="text"
-                        placeholder="Completion Date (e.g. October 2026)"
+                        placeholder="Completion Date (e.g. November 2026)"
                         value={newCourse.completedDate}
                         onChange={(e) => setNewCourse({ ...newCourse, completedDate: e.target.value })}
                         required
@@ -1559,7 +1660,7 @@ export default function DashboardPage() {
                     </div>
                     <input
                       type="text"
-                      placeholder="Key topics (comma separated, e.g. Raft, Paxos, MapReduce)"
+                      placeholder="Key topics (comma separated, e.g. Verilog, Digital Filters, RTOS)"
                       value={newCourse.keyTopics}
                       onChange={(e) => setNewCourse({ ...newCourse, keyTopics: e.target.value })}
                       className="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900"
@@ -1591,7 +1692,7 @@ export default function DashboardPage() {
                       <div>
                         <span className="text-xs font-bold text-blue-600">{crs.platform}</span>
                         <h4 className="text-sm font-bold text-slate-900">{crs.title}</h4>
-                        <p className="text-xs text-slate-500 font-medium">Instructor: {crs.instructor} • {crs.completedDate}</p>
+                        <p className="text-xs text-slate-500 font-medium">{crs.instructor} • {crs.completedDate}</p>
                       </div>
                       <button
                         onClick={() => {
@@ -1646,7 +1747,7 @@ export default function DashboardPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <input
                         type="text"
-                        placeholder="Certificate Title (e.g. AWS Solutions Architect)"
+                        placeholder="Certificate Title (e.g. VLSI Verification / Embedded C)"
                         value={newCert.title}
                         onChange={(e) => setNewCert({ ...newCert, title: e.target.value })}
                         required
@@ -1654,7 +1755,7 @@ export default function DashboardPage() {
                       />
                       <input
                         type="text"
-                        placeholder="Issuer (e.g. Amazon Web Services)"
+                        placeholder="Issuer / Authority"
                         value={newCert.issuer}
                         onChange={(e) => setNewCert({ ...newCert, issuer: e.target.value })}
                         required
@@ -1662,7 +1763,7 @@ export default function DashboardPage() {
                       />
                       <input
                         type="text"
-                        placeholder="Issue Date (e.g. August 2026)"
+                        placeholder="Issue Date (e.g. October 2026)"
                         value={newCert.issueDate}
                         onChange={(e) => setNewCert({ ...newCert, issueDate: e.target.value })}
                         required

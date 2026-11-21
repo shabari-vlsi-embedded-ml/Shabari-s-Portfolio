@@ -105,21 +105,6 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
     persistData((prev) => ({
       ...prev,
       projects: [newProject, ...prev.projects],
-      profile: {
-        ...prev.profile,
-        metrics: {
-          ...prev.profile.metrics,
-          totalProjects: prev.profile.metrics.totalProjects + 1,
-          completedProjects:
-            project.status === 'completed'
-              ? prev.profile.metrics.completedProjects + 1
-              : prev.profile.metrics.completedProjects,
-          inProgressProjects:
-            project.status === 'in_progress'
-              ? prev.profile.metrics.inProgressProjects + 1
-              : prev.profile.metrics.inProgressProjects,
-        },
-      },
     }));
   };
 
@@ -157,13 +142,6 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
     persistData((prev) => ({
       ...prev,
       prizes: [newPrize, ...prev.prizes],
-      profile: {
-        ...prev.profile,
-        metrics: {
-          ...prev.profile.metrics,
-          prizesCount: prev.profile.metrics.prizesCount + 1,
-        },
-      },
     }));
   };
 
@@ -194,13 +172,6 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
     persistData((prev) => ({
       ...prev,
       courses: [newCourse, ...prev.courses],
-      profile: {
-        ...prev.profile,
-        metrics: {
-          ...prev.profile.metrics,
-          coursesCount: prev.profile.metrics.coursesCount + 1,
-        },
-      },
     }));
   };
 
@@ -216,13 +187,6 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
     persistData((prev) => ({
       ...prev,
       certificates: [newCert, ...prev.certificates],
-      profile: {
-        ...prev.profile,
-        metrics: {
-          ...prev.profile.metrics,
-          certificationsCount: prev.profile.metrics.certificationsCount + 1,
-        },
-      },
     }));
   };
 

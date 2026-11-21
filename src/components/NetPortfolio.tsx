@@ -7,37 +7,45 @@ import { usePortfolio } from '@/lib/store';
 
 export default function NetPortfolio() {
   const { data } = usePortfolio();
-  const { profile } = data;
+  const { profile, projects, certificates, prizes, courses } = data;
+
+  // Dynamically compute exact counts from your live personal monitor & sectors!
+  const totalProjects = projects.length;
+  const completedProjects = projects.filter((p) => p.status === 'completed').length;
+  const inProgressProjects = projects.filter((p) => p.status === 'in_progress').length;
+  const certificationsCount = certificates.length;
+  const prizesCount = prizes.length;
+  const coursesCount = courses.length;
 
   const stats = [
     {
-      label: 'Shipped Projects',
-      value: profile.metrics.totalProjects,
-      subtext: `${profile.metrics.completedProjects} live & ${profile.metrics.inProgressProjects} active`,
+      label: 'Total Projects',
+      value: totalProjects,
+      subtext: `${completedProjects} completed & ${inProgressProjects} in progress`,
       icon: FolderGit2,
       color: 'from-blue-600 to-sky-500',
       shadow: 'shadow-blue-500/20',
     },
     {
-      label: 'Industry Certifications',
-      value: profile.metrics.certificationsCount,
-      subtext: 'AWS, GCP, Meta & CNCF verified',
+      label: 'Verified Certifications',
+      value: certificationsCount,
+      subtext: certificationsCount > 0 ? `${certificationsCount} active credentials` : 'Ready to add credentials',
       icon: CheckCircle2,
       color: 'from-blue-500 to-indigo-600',
       shadow: 'shadow-blue-500/20',
     },
     {
       label: 'Competitive Prizes',
-      value: profile.metrics.prizesCount,
-      subtext: 'National hackathons & sprints',
+      value: prizesCount,
+      subtext: prizesCount > 0 ? `${prizesCount} hackathon & sprint awards` : 'Competitions & tech fest awards',
       icon: Award,
       color: 'from-amber-500 to-orange-500',
       shadow: 'shadow-amber-500/20',
     },
     {
-      label: 'Advanced Courses',
-      value: profile.metrics.coursesCount,
-      subtext: 'MIT 6.824, CMU DB, DeepLearning',
+      label: 'Completed Courses',
+      value: coursesCount,
+      subtext: coursesCount > 0 ? `${coursesCount} engineering courses` : 'Academic & professional coursework',
       icon: BookOpen,
       color: 'from-indigo-600 to-blue-600',
       shadow: 'shadow-indigo-500/20',
@@ -77,11 +85,11 @@ export default function NetPortfolio() {
             transition={{ delay: 0.2 }}
             className="mt-3 text-slate-600 text-base"
           >
-            A consolidated aggregation of academic rigor, open-source engineering, and competitive benchmarks.
+            Real-time live aggregation of your hardware & software projects, courses, certifications, and achievements.
           </motion.p>
         </div>
 
-        {/* 4 Metric Cards */}
+        {/* 4 Dynamic Metric Cards (Syncs directly with your updates!) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
           {stats.map((stat, idx) => {
             const Icon = stat.icon;
@@ -99,7 +107,7 @@ export default function NetPortfolio() {
                 </div>
 
                 <div className="text-3xl font-black text-slate-900 tracking-tight">
-                  {stat.value}+
+                  {stat.value}
                 </div>
                 <div className="text-sm font-bold text-slate-800 mt-1">
                   {stat.label}
@@ -133,8 +141,8 @@ export default function NetPortfolio() {
 
             <div className="flex-shrink-0 flex flex-col items-center justify-center p-4 rounded-xl bg-blue-50/80 border border-blue-100 text-center min-w-[180px]">
               <Sparkles className="w-6 h-6 text-blue-600 mb-1" />
-              <div className="text-xs text-slate-600 font-semibold">Quantified Benchmark</div>
-              <div className="text-sm font-black text-blue-700 mt-0.5">{profile.metrics.impactScore}</div>
+              <div className="text-xs text-slate-600 font-semibold">Specialization Focus</div>
+              <div className="text-sm font-black text-blue-700 mt-0.5">{profile.metrics?.impactScore || "ECE Innovator"}</div>
             </div>
           </div>
         </motion.div>

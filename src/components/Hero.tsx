@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { GraduationCap, ArrowRight, Activity, Layers, Award } from 'lucide-react';
+import { GraduationCap, ArrowRight, Activity, Cpu, Radio, Wifi, Code, Sparkles } from 'lucide-react';
 import { usePortfolio } from '@/lib/store';
 import Link from 'next/link';
 import { GithubIcon, LinkedinIcon } from './Icons';
@@ -11,12 +11,30 @@ export default function Hero() {
   const { data } = usePortfolio();
   const { profile } = data;
 
+  const defaultSpecializations = [
+    { label: 'VLSI Design', icon: Cpu, desc: 'Digital Logic & Verilog' },
+    { label: 'Embedded Systems', icon: Radio, desc: 'Microcontrollers & C/C++' },
+    { label: 'Industrial IoT (IIoT)', icon: Wifi, desc: 'Telemetry & Smart Sensors' },
+    { label: 'Electronics & Comm', icon: Radio, desc: 'Circuits & Signals' },
+    { label: 'Vibe Coding', icon: Code, desc: 'AI-Powered Workflows' },
+    { label: 'Website Builder', icon: Code, desc: 'Modern Web Portals' },
+    { label: 'Content Creator', icon: Sparkles, desc: 'Technical Media' },
+    { label: 'Engineering Services', icon: Cpu, desc: 'Hardware & Code Prototyping' },
+  ];
+
+  const specializationsToDisplay = (profile.specializations || profile.domainTags || []).length > 0
+    ? (profile.specializations || profile.domainTags || []).map((name) => {
+        const found = defaultSpecializations.find((d) => d.label.toLowerCase() === name.toLowerCase());
+        return found || { label: name, icon: Cpu, desc: 'Specialized Domain' };
+      })
+    : defaultSpecializations;
+
   return (
     <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-12">
           
-          {/* Left Column: Introduction & Current Degree */}
+          {/* Left Column: Slogan, Name & Degree */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
@@ -36,13 +54,19 @@ export default function Hero() {
               <span className="text-slate-600 font-medium">{profile.yearOfStudy}</span>
             </motion.div>
 
-            {/* Main Headline */}
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
-              Architecting scalable software,{' '}
-              <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent">
-                intelligent agents
-              </span>
-              , & cloud systems.
+            {/* Main Slogan / Headline (Fully Customizable by User in Dashboard) */}
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.15]">
+              {profile.slogan ? (
+                <span>{profile.slogan}</span>
+              ) : (
+                <>
+                  Engineering{' '}
+                  <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent">
+                    Intelligent Hardware
+                  </span>
+                  , Embedded Firmware & IIoT Systems.
+                </>
+              )}
             </h1>
 
             {/* University & Sub-badge */}
@@ -53,7 +77,7 @@ export default function Hero() {
             </p>
 
             {/* Bio Paragraph */}
-            <p className="mt-4 text-base text-slate-600 leading-relaxed max-w-2xl">
+            <p className="mt-4 text-base text-slate-600 leading-relaxed max-w-2xl font-normal">
               {profile.bio}
             </p>
 
@@ -103,91 +127,73 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          {/* Right Column: Dynamic Live Degree & Growth Radar Widget */}
+          {/* Right Column: Electronics, VLSI, IIoT & Services Hub (Replaced Unwanted Dev Radar) */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="lg:w-96 w-full"
+            className="lg:w-[420px] w-full"
           >
-            <div className="relative p-6 rounded-2xl glass-panel bg-white/90 border border-slate-200 shadow-xl shadow-blue-500/5">
-              {/* Top Accent Light */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-100 rounded-full blur-2xl pointer-events-none" />
-
+            <div className="relative p-6 rounded-3xl glass-panel bg-white/95 border border-slate-200 shadow-xl shadow-blue-500/5">
               <div className="flex items-center justify-between pb-4 border-b border-slate-100">
                 <div className="flex items-center gap-2">
-                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
-                  <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                    Student & Dev Radar
+                  <div className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" />
+                  <span className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                    Core Domains & Services
                   </span>
                 </div>
-                <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 font-semibold border border-blue-200">
-                  ACTIVE
+                <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 font-bold border border-blue-200">
+                  ECE • VLSI • IIoT
                 </span>
               </div>
 
-              {/* Quick Status Cards */}
-              <div className="mt-4 space-y-3">
-                <div className="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200/80">
-                  <div className="flex items-center justify-between text-xs text-slate-500">
-                    <span className="flex items-center gap-1.5 font-medium">
-                      <GraduationCap className="w-3.5 h-3.5 text-blue-600" />
-                      Degree Status
-                    </span>
-                    <span className="text-blue-700 font-bold">{profile.yearOfStudy}</span>
-                  </div>
-                  <p className="mt-1 text-sm font-bold text-slate-900 truncate">
-                    {profile.currentDegree}
-                  </p>
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200/80">
-                  <div className="flex items-center justify-between text-xs text-slate-500">
-                    <span className="flex items-center gap-1.5 font-medium">
-                      <Layers className="w-3.5 h-3.5 text-blue-600" />
-                      Active Projects
-                    </span>
-                    <span className="text-blue-700 font-bold">
-                      {profile.metrics.inProgressProjects} In Progress
-                    </span>
-                  </div>
-                  <div className="mt-2 w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+              {/* Specializations & Services Grid */}
+              <div className="mt-4 grid grid-cols-2 gap-2.5">
+                {specializationsToDisplay.map((spec, i) => {
+                  const Icon = spec.icon;
+                  return (
                     <div
-                      className="bg-gradient-to-r from-blue-600 to-indigo-600 h-full rounded-full"
-                      style={{
-                        width: `${Math.round(
-                          (profile.metrics.completedProjects / profile.metrics.totalProjects) * 100
-                        )}%`,
-                      }}
-                    />
-                  </div>
-                  <div className="mt-1.5 flex justify-between text-[11px] text-slate-500 font-medium">
-                    <span>{profile.metrics.completedProjects} Completed</span>
-                    <span>{profile.metrics.totalProjects} Total</span>
-                  </div>
-                </div>
+                      key={i}
+                      className="p-3 rounded-xl bg-slate-50/80 border border-slate-200/80 hover:border-blue-300 hover:bg-blue-50/40 transition-all duration-150 group"
+                    >
+                      <div className="flex items-center gap-2">
+                        <div className="p-1.5 rounded-lg bg-blue-100/70 text-blue-700 group-hover:scale-105 transition-transform">
+                          <Icon className="w-3.5 h-3.5" />
+                        </div>
+                        <h4 className="text-xs font-bold text-slate-900 line-clamp-1 group-hover:text-blue-600">
+                          {spec.label}
+                        </h4>
+                      </div>
+                      <p className="text-[10px] text-slate-500 mt-1 line-clamp-1 font-medium">
+                        {spec.desc}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200/80">
-                  <div className="flex items-center justify-between text-xs text-slate-500">
-                    <span className="flex items-center gap-1.5 font-medium">
-                      <Award className="w-3.5 h-3.5 text-amber-500" />
-                      Prizes Won
-                    </span>
-                    <span className="text-amber-600 font-bold">{profile.metrics.prizesCount} Awards</span>
-                  </div>
-                  <p className="mt-1 text-xs text-slate-600 font-normal">
-                    Hackathons, algorithmic tournaments & sprint podiums.
-                  </p>
+              {/* Quick Degree & College Badge */}
+              <div className="mt-4 p-3 rounded-xl bg-blue-50/70 border border-blue-100 flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] text-blue-600 font-bold uppercase tracking-wider block">
+                    Undergrad Department
+                  </span>
+                  <span className="text-xs font-bold text-slate-900">
+                    {profile.institution}
+                  </span>
                 </div>
+                <span className="text-xs font-extrabold text-blue-700 font-mono">
+                  {profile.yearOfStudy}
+                </span>
               </div>
 
               {/* Action Link to Monitor */}
               <div className="mt-4 pt-3 border-t border-slate-100 text-center">
                 <Link
                   href="/dashboard"
-                  className="text-xs text-blue-600 hover:text-blue-700 font-semibold inline-flex items-center gap-1"
+                  className="text-xs text-blue-600 hover:text-blue-700 font-bold inline-flex items-center gap-1"
                 >
-                  Configure & Update Portfolio Sectors &rarr;
+                  Edit Domains, Degree & Slogan in Dashboard &rarr;
                 </Link>
               </div>
             </div>

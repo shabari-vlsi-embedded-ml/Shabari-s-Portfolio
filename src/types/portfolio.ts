@@ -1,10 +1,16 @@
 export interface Profile {
   fullName: string;
+  initials?: string;
   currentDegree: string;
   institution: string;
-  yearOfStudy: string; // e.g. "3rd Year, Semester 6"
+  yearOfStudy: string;
   expectedGraduation: string;
   bio: string;
+  tagline: string;         // Short sub-tagline shown in Navbar
+  taglineHighlight?: string; // Highlighted word/phrase in hero headline
+  slogan?: string;         // Big hero headline text (editable from CMS)
+  domainTags?: string[];   // ECE domain badges
+  specializations?: string[]; // Legacy alias for domainTags
   netPortfolioSummary: string;
   socialLinks: {
     github?: string;
@@ -12,25 +18,23 @@ export interface Profile {
     twitter?: string;
     email?: string;
   };
-  metrics: {
-    totalProjects: number;
-    completedProjects: number;
-    inProgressProjects: number;
-    certificationsCount: number;
-    coursesCount: number;
-    prizesCount: number;
-    impactScore: string; // e.g., "Top 5% Student Dev"
+  metrics?: {
+    impactScore?: string;
+    totalProjects?: number;
+    completedProjects?: number;
+    inProgressProjects?: number;
+    prizesCount?: number;
+    coursesCount?: number;
+    certificationsCount?: number;
   };
 }
-
-export type SkillCategory = 'Frontend' | 'Backend' | 'AI / Machine Learning' | 'DevOps & Cloud' | 'Core CS & Data';
 
 export interface Skill {
   id: string;
   name: string;
-  category: SkillCategory;
-  proficiency: number; // 0 to 100
-  experience: string; // e.g., "2 years"
+  category: string; // Free-text, user defines their own (e.g. VLSI, Embedded, IIoT)
+  proficiency: number;
+  experience: string;
 }
 
 export interface Project {
@@ -42,8 +46,8 @@ export interface Project {
   category: string;
   repoUrl?: string;
   liveUrl?: string;
-  targetEndDate?: string; // for in_progress projects
-  progressPercent?: number; // 0 to 100
+  targetEndDate?: string;
+  progressPercent?: number;
   keyAchievements?: string[];
 }
 
@@ -52,7 +56,7 @@ export interface Prize {
   title: string;
   competition: string;
   organizer: string;
-  position: string; // e.g. "1st Place (National Winner)", "Runner Up"
+  position: string;
   year: string;
   description: string;
 }
@@ -61,7 +65,7 @@ export interface ExtraCurricular {
   id: string;
   role: string;
   organization: string;
-  period: string; // e.g., "2024 - Present"
+  period: string;
   description: string;
   highlights: string[];
 }
@@ -69,7 +73,7 @@ export interface ExtraCurricular {
 export interface Course {
   id: string;
   title: string;
-  platform: string; // e.g., "Coursera / Stanford Online", "edX"
+  platform: string;
   instructor: string;
   completedDate: string;
   keyTopics: string[];
@@ -78,13 +82,12 @@ export interface Course {
 export interface Certificate {
   id: string;
   title: string;
-  issuer: string; // e.g., "Amazon Web Services", "Google Cloud", "Meta"
+  issuer: string;
   issueDate: string;
   credentialUrl?: string;
   badgeId?: string;
 }
 
-// Personal Monitor Interfaces
 export interface ProjectToEnd {
   id: string;
   title: string;
@@ -106,8 +109,8 @@ export interface TopicToStudy {
 export interface FocusArea {
   id: string;
   title: string;
-  timeframe: string; // e.g. "Q1 - Target Focus"
-  concentrationWeight: number; // e.g. 50%
+  timeframe: string;
+  concentrationWeight: number;
   description: string;
   keyGoals: string[];
 }
