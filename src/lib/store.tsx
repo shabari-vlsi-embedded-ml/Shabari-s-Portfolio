@@ -72,7 +72,15 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
-        setData(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        if (parsed.profile && (parsed.profile.fullName === 'Alex Rivera' || !parsed.profile.fullName)) {
+          parsed.profile.fullName = 'L.S.Shabari';
+          parsed.profile.initials = 'LS';
+          parsed.profile.currentDegree = 'Bachelor of Technology in Electronics and Communication Engineering';
+          parsed.profile.institution = 'KCG College Of Technology';
+          parsed.profile.yearOfStudy = '2nd Year (3rd Semester)';
+        }
+        setData(parsed);
       }
     } catch {
       // Fallback to initial data if localStorage fails

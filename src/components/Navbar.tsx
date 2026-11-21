@@ -33,11 +33,11 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { label: 'Overview', href: '#net-portfolio' },
+    { label: 'Activities & Awards', href: '#awards' },
     { label: 'Skills', href: '#skills' },
     { label: 'Projects', href: '#projects' },
-    { label: 'Awards & Activities', href: '#awards' },
-    { label: 'Certificates', href: '#certifications' },
+    { label: 'Net Portfolio', href: '#net-portfolio' },
+    { label: 'Courses & Certs', href: '#certifications' },
   ];
 
   return (

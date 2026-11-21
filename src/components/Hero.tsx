@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { GraduationCap, ArrowRight, Activity, Cpu, Radio, Wifi, Code, Sparkles } from 'lucide-react';
+import { GraduationCap, ArrowRight, Activity, Cpu, Radio, Wifi, Code, Sparkles, Wrench } from 'lucide-react';
 import { usePortfolio } from '@/lib/store';
 import Link from 'next/link';
 import { GithubIcon, LinkedinIcon } from './Icons';
@@ -19,18 +19,18 @@ export default function Hero() {
     { label: 'Vibe Coding', icon: Code, desc: 'AI-Powered Workflows' },
     { label: 'Website Builder', icon: Code, desc: 'Modern Web Portals' },
     { label: 'Content Creator', icon: Sparkles, desc: 'Technical Media' },
-    { label: 'Engineering Services', icon: Cpu, desc: 'Hardware & Code Prototyping' },
+    { label: 'Engineering Services', icon: Wrench, desc: 'Hardware & Code Solutions' },
   ];
 
   const specializationsToDisplay = (profile.specializations || profile.domainTags || []).length > 0
     ? (profile.specializations || profile.domainTags || []).map((name) => {
         const found = defaultSpecializations.find((d) => d.label.toLowerCase() === name.toLowerCase());
-        return found || { label: name, icon: Cpu, desc: 'Specialized Domain' };
+        return found || { label: name, icon: Cpu, desc: 'Domain Specialization' };
       })
     : defaultSpecializations;
 
   return (
-    <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
+    <section id="hero" className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-12">
           
@@ -41,30 +41,45 @@ export default function Hero() {
             transition={{ duration: 0.6, ease: 'easeOut' }}
             className="flex-1 max-w-3xl"
           >
-            {/* Status Pill: Current Degree & University */}
+            {/* Status Pill: Sector 1, Current Degree & University */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1, duration: 0.4 }}
-              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold mb-6 shadow-sm backdrop-blur-md"
+              className="inline-flex flex-wrap items-center gap-2.5 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold mb-5 shadow-sm backdrop-blur-md"
             >
+              <span className="px-2 py-0.5 rounded-md bg-blue-600 text-white font-extrabold text-[10px] uppercase tracking-wider">
+                Sector 1
+              </span>
               <GraduationCap className="w-4 h-4 text-blue-600" />
               <span>{profile.currentDegree}</span>
               <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
               <span className="text-slate-600 font-medium">{profile.yearOfStudy}</span>
             </motion.div>
 
+            {/* Prominent Student Name & Tagline */}
+            <div className="flex flex-wrap items-center gap-3 mb-4">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
+                Hi, I am <span className="text-blue-600 underline decoration-blue-300 decoration-wavy underline-offset-4">{profile.fullName || 'L.S.Shabari'}</span>
+              </h2>
+              {profile.tagline && (
+                <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-bold border border-blue-200 shadow-sm">
+                  {profile.tagline}
+                </span>
+              )}
+            </div>
+
             {/* Main Slogan / Headline (Fully Customizable by User in Dashboard) */}
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.15]">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.18]">
               {profile.slogan ? (
                 <span>{profile.slogan}</span>
               ) : (
                 <>
                   Engineering{' '}
                   <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent">
-                    Intelligent Hardware
+                    VLSI, Embedded Systems
                   </span>
-                  , Embedded Firmware & IIoT Systems.
+                  , IIoT & Intelligent Web Services.
                 </>
               )}
             </h1>

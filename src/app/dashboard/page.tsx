@@ -335,6 +335,55 @@ export default function DashboardPage() {
               </div>
             </div>
 
+            {/* Academic Milestones & Expected Graduation Live Manager */}
+            <div className="p-6 rounded-3xl bg-gradient-to-r from-blue-50/90 via-indigo-50/50 to-white border border-blue-200/80 shadow-sm">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
+                <div className="flex items-start sm:items-center gap-3.5">
+                  <div className="p-3 rounded-2xl bg-blue-600 text-white shadow-md shadow-blue-600/25 shrink-0">
+                    <GraduationCap className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-blue-600 bg-blue-100/70 px-2 py-0.5 rounded">
+                      Sector 1 • Academic Degree & Milestone Target
+                    </span>
+                    <h3 className="text-base font-bold text-slate-900 mt-1">
+                      {data.profile.currentDegree}
+                    </h3>
+                    <p className="text-xs text-slate-600 font-medium mt-0.5">
+                      {data.profile.institution} • Current Level: <span className="text-slate-900 font-bold">{data.profile.yearOfStudy}</span>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 bg-white p-3 rounded-2xl border border-slate-200 shadow-sm">
+                  <div>
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
+                      Expected Graduation
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={profileForm.expectedGraduation}
+                        onChange={(e) => setProfileForm({ ...profileForm, expectedGraduation: e.target.value })}
+                        placeholder="e.g. June 2028"
+                        className="text-xs font-bold text-blue-700 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 w-36"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          updateProfile({ expectedGraduation: profileForm.expectedGraduation });
+                          triggerToast(`Expected Graduation updated to "${profileForm.expectedGraduation}"! 🎓`);
+                        }}
+                        className="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition shadow-sm cursor-pointer whitespace-nowrap"
+                      >
+                        Update
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* SECTOR A: PROJECTS WANT TO END */}
             <section>
               <div className="flex items-center justify-between mb-5">
@@ -882,10 +931,10 @@ export default function DashboardPage() {
               <div className="flex flex-wrap gap-2 mt-5">
                 {[
                   { id: 'degree', label: '1. Name, Slogan & Degree' },
+                  { id: 'extracurricular', label: '2. Extracurriculars' },
+                  { id: 'prizes', label: '3. Prizes Won' },
                   { id: 'skills', label: '4. Skills (Custom Tags)' },
                   { id: 'projects', label: '5 & 6. Projects' },
-                  { id: 'prizes', label: '3. Prizes Won' },
-                  { id: 'extracurricular', label: '2. Extracurriculars' },
                   { id: 'summary', label: '7. Net Portfolio Statement' },
                   { id: 'courses', label: '8. Courses' },
                   { id: 'certificates', label: '9. Certificates' },
@@ -980,6 +1029,39 @@ export default function DashboardPage() {
                       onChange={(e) => setProfileForm({ ...profileForm, yearOfStudy: e.target.value })}
                       className="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600"
                     />
+                  </div>
+                </div>
+
+                {/* Expected Graduation — fully editable by user */}
+                <div className="p-4 rounded-xl bg-blue-50/60 border border-blue-100">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="flex-1">
+                      <label className="text-xs text-slate-800 font-bold block mb-1">
+                        Expected Graduation (Class of ...)
+                      </label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          value={profileForm.expectedGraduation}
+                          onChange={(e) => setProfileForm({ ...profileForm, expectedGraduation: e.target.value })}
+                          placeholder="June 2028"
+                          className="flex-1 max-w-sm px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 font-bold focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-sm"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            updateProfile({ expectedGraduation: profileForm.expectedGraduation });
+                            triggerToast(`Expected Graduation saved as "${profileForm.expectedGraduation}"! 🎓`);
+                          }}
+                          className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition shadow-sm cursor-pointer whitespace-nowrap"
+                        >
+                          Save Graduation Year
+                        </button>
+                      </div>
+                      <span className="text-[11px] text-slate-500 mt-1.5 block">
+                        Updates your expected graduation year everywhere on the website ("Class of ..." in Hero, Degree Card, and Monitor).
+                      </span>
+                    </div>
                   </div>
                 </div>
 
